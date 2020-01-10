@@ -20,6 +20,7 @@ import butterknife.Unbinder;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Function;
 import io.reactivex.observers.DisposableObserver;
 import io.reactivex.schedulers.Schedulers;
 import java.util.ArrayList;
@@ -73,17 +74,21 @@ public class ConcurrencyWithSchedulersDemoFragment extends BaseFragment {
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(d);
 
-    _disposables.add(d);
+//    _disposables.add(d);
   }
 
   private Observable<Boolean> _getObservable() {
+
     return Observable.just(true)
         .map(
-            aBoolean -> {
-              _log("Within Observable");
-              _doSomeLongOperation_thatBlocksCurrentThread();
-              return aBoolean;
-            });
+                new Function<Boolean, Boolean>() {
+                  @Override
+                  public Boolean apply(Boolean aBoolean) throws Exception {
+//                    ConcurrencyWithSchedulersDemoFragment.this._log("Within Observable");
+//                    ConcurrencyWithSchedulersDemoFragment.this._doSomeLongOperation_thatBlocksCurrentThread();
+                    return aBoolean;
+                  }
+                });
   }
 
   /**
